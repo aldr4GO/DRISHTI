@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+.vscode/
+
+# Large model files (download from HF at runtime)
+*.safetensors
+*.pth
+*.bin
+*.ckpt
+
+# HuggingFace/model cache directories
+.cache/
+.huggingface/
+models/EarthMind-4B/.cache/
+models/RemoteSAM/pretrained_weights/
+
+# Git LFS attributes (if not using LFS)
+.gitattributes
+
+myenv

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  ray-serve:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: earthmind-ray-serve
+    ports:
+      - "8000:8000"
+    shm_size: '8gb'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0,1
+    volumes:
+      # Mount models directory from host
+      - ./models:/app/models
+      # Optional: Mount a cache directory for model weights if you want to persist them
+      - model_cache:/app/model_cache
+    restart: unless-stopped
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  model_cache:
